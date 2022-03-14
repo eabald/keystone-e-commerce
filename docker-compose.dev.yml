@@ -1,0 +1,59 @@
+version: '3.3'
+
+services:
+  database:
+    image: postgres:14
+    ports:
+      - 5432:5432
+    env_file:
+      - .env
+    networks:
+      - mainNet
+  pgadmin:
+    links:
+      - database:database
+    image: dpage/pgadmin4
+    ports:
+      - '8080:80'
+    networks:
+      - mainNet
+    volumes:
+      - pgadminData:/root/.pgadmin
+    env_file:
+      - .env
+  meilisearch:
+    image: getmeili/meilisearch
+    ports:
+      - '7700:7700'
+    networks:
+      - mainNet
+  backend:
+    build:
+      context: ./backend/
+      dockerfile: Dockerfile.dev
+    ports:
+      - '5000:5000'
+    volumes:
+      - ./backend:/usr/app
+    networks:
+      - mainNet
+    env_file:
+      - .env
+  client:
+    build:
+      context: ./client/
+      dockerfile: Dockerfile.dev
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./client:/usr/app
+    networks:
+      - mainNet
+    env_file:
+      - .env
+
+networks:
+  mainNet:
+    driver: bridge
+volumes:
+  pgadminData:
