@@ -1,12 +1,13 @@
 import { list } from '@keystone-6/core';
 import { relationship, text, timestamp } from '@keystone-6/core/fields';
+import { filterCustomerAccess, filterCustomerAccessCreate } from '../shared';
 
 export const Address = list({
   fields: {
     addressName: text(),
     name: text({ validation: { isRequired: true } }),
     streetAddress: text({ validation: { isRequired: true } }),
-    streetAddress2: text({ validation: { isRequired: true } }),
+    streetAddress2: text(),
     city: text({ validation: { isRequired: true } }),
     postalCode: text({ validation: { isRequired: true } }),
     country: text({ validation: { isRequired: true } }),
@@ -26,5 +27,22 @@ export const Address = list({
         updatedAt: true,
       },
     }),
+  },
+  access: {
+    operation: {
+      query: ({ session }) => !!session,
+      create: ({ session }) => !!session,
+      update: ({ session }) => !!session,
+      delete: ({ session }) => !!session,
+    },
+    filter: {
+      query: ({ session }) => filterCustomerAccess(session),
+      update: ({ session }) => filterCustomerAccess(session),
+      delete: ({ session }) => filterCustomerAccess(session),
+    },
+    item: {
+      create: ({ session, inputData }) =>
+        filterCustomerAccessCreate(session, inputData),
+    },
   },
 });

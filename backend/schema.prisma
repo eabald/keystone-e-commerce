@@ -50,7 +50,7 @@ model Cart {
   userId       String?   @map("user")
   products     Product[] @relation("Cart_products")
   lastModified DateTime? @default(now()) @updatedAt
-  sum          Decimal   @postgresql.Decimal(18, 4)
+  sum          Decimal   @default("0") @postgresql.Decimal(18, 4)
 
   @@index([userId])
 }
@@ -163,6 +163,7 @@ model Shipment {
 
 enum UserRoleType {
   admin
+  employee
   customer
 }
 

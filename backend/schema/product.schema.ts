@@ -7,6 +7,7 @@ import {
   timestamp,
 } from '@keystone-6/core/fields';
 import { document } from '@keystone-6/fields-document';
+import { Roles } from '../enums/roles.enum';
 
 export const Product = list({
   fields: {
@@ -27,5 +28,15 @@ export const Product = list({
         updatedAt: true,
       },
     }),
+  },
+  access: {
+    operation: {
+      create: ({ session }) =>
+        !!session && session.data.role !== Roles.Customer,
+      update: ({ session }) =>
+        !!session && session.data.role !== Roles.Customer,
+      delete: ({ session }) =>
+        !!session && session.data.role !== Roles.Customer,
+    },
   },
 });

@@ -1,5 +1,6 @@
 import { list } from '@keystone-6/core';
 import { relationship, text, timestamp } from '@keystone-6/core/fields';
+import { Roles } from '../enums/roles.enum';
 
 export const Category = list({
   fields: {
@@ -17,5 +18,15 @@ export const Category = list({
         updatedAt: true,
       },
     }),
+  },
+  access: {
+    operation: {
+      create: ({ session }) =>
+        !!session && session.data.role !== Roles.Customer,
+      update: ({ session }) =>
+        !!session && session.data.role !== Roles.Customer,
+      delete: ({ session }) =>
+        !!session && session.data.role !== Roles.Customer,
+    },
   },
 });
