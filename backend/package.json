@@ -6,7 +6,11 @@
     "dev": "keystone dev",
     "start": "keystone start",
     "build": "keystone build",
-    "postinstall": "keystone postinstall"
+    "postinstall": "keystone postinstall",
+    "seed": "keystone prisma db seed"
+  },
+  "prisma": {
+    "seed": "ts-node seed-data"
   },
   "dependencies": {
     "@keystone-6/auth": "^1.0.1",
@@ -17,5 +21,8 @@
   },
   "engines": {
     "node": "^14.15 || ^16.13"
+  },
+  "devDependencies": {
+    "ts-node": "^10.7.0"
   }
 }

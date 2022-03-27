@@ -1,0 +1,22 @@
+{
+  "users": [
+    {
+      "name": "Admin",
+      "email": "admin@gmail.com",
+      "password": "$2a$10$mJBzYnc/23jilS8.V1AKgOPlwOtjOcF.wAEoz29qk8SxYno/o6aYC",
+      "role": "admin"
+    },
+    {
+      "name": "Employee",
+      "email": "employee@gmail.com",
+      "password": "$2a$10$mJBzYnc/23jilS8.V1AKgOPlwOtjOcF.wAEoz29qk8SxYno/o6aYC",
+      "role": "employee"
+    },
+    {
+      "name": "Customer",
+      "email": "customer@gmail.com",
+      "password": "$2a$10$mJBzYnc/23jilS8.V1AKgOPlwOtjOcF.wAEoz29qk8SxYno/o6aYC",
+      "role": "customer"
+    }
+  ]
+}

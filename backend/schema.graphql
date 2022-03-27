@@ -22,6 +22,7 @@ type PasswordState {
 
 enum UserRoleType {
   admin
+  employee
   customer
 }
 
@@ -324,18 +325,6 @@ input ProductRelateToManyForUpdateInput {
 input CartUpdateArgs {
   where: CartWhereUniqueInput!
   data: CartUpdateInput!
-}
-
-input CartCreateInput {
-  user: UserRelateToOneForCreateInput
-  products: ProductRelateToManyForCreateInput
-  lastModified: DateTime
-  sum: Decimal
-}
-
-input ProductRelateToManyForCreateInput {
-  create: [ProductCreateInput!]
-  connect: [ProductWhereUniqueInput!]
 }
 
 type Order {
@@ -720,6 +709,11 @@ input CategoryRelateToOneForCreateInput {
   connect: CategoryWhereUniqueInput
 }
 
+input ProductRelateToManyForCreateInput {
+  create: [ProductCreateInput!]
+  connect: [ProductWhereUniqueInput!]
+}
+
 type ProductImage {
   id: ID!
   alt: String
@@ -1001,8 +995,6 @@ type Mutation {
   updateAddresses(data: [AddressUpdateArgs!]!): [Address]
   deleteAddress(where: AddressWhereUniqueInput!): Address
   deleteAddresses(where: [AddressWhereUniqueInput!]!): [Address]
-  createCart(data: CartCreateInput!): Cart
-  createCarts(data: [CartCreateInput!]!): [Cart]
   updateCart(where: CartWhereUniqueInput!, data: CartUpdateInput!): Cart
   updateCarts(data: [CartUpdateArgs!]!): [Cart]
   deleteCart(where: CartWhereUniqueInput!): Cart
