@@ -8,11 +8,10 @@ export const ProductImage = list({
     alt: text({ validation: { isRequired: true } }),
     image: cloudinaryImage({
       cloudinary: {
-        cloudName: process.env.CLOUDINARY_CLOUD_NAME ?? 'do2s70i8u',
-        apiKey: process.env.CLOUDINARY_API_KEY ?? '774697418362449',
-        apiSecret:
-          process.env.CLOUDINARY_API_SECRET ?? 'QmAussSge1GGrVtGvtxOT5qrtYI',
-        folder: process.env.CLOUDINARY_API_FOLDER ?? 'product-images',
+        cloudName: process.env.CLOUDINARY_CLOUD_NAME ?? '',
+        apiKey: process.env.CLOUDINARY_API_KEY ?? '',
+        apiSecret: process.env.CLOUDINARY_API_SECRET ?? '',
+        folder: process.env.CLOUDINARY_API_FOLDER ?? '',
       },
     }),
     createdAt: timestamp({
