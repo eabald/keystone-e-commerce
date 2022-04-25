@@ -11,9 +11,11 @@ export const Cart = list({
       },
     }),
     products: relationship({
-      ref: 'Product',
+      ref: 'CartProduct',
       many: true,
-      ui: { hideCreate: true },
+      db: {
+        foreignKey: true,
+      },
     }),
     lastModified: timestamp({
       defaultValue: { kind: 'now' },
@@ -37,5 +39,42 @@ export const Cart = list({
   },
   graphql: {
     omit: ['create'],
+  },
+  hooks: {
+    resolveInput: async ({ resolvedData, context }) => {
+      if (resolvedData?.products.connect.length) {
+        const products = await context.query.CartProduct.findMany({
+          where: {
+            id: {
+              in: resolvedData?.products.connect.map(
+                (el: { id: string }) => el.id
+              ),
+            },
+          },
+          query: 'amount product { price }',
+        });
+        const sum = products.reduce((prev: number, current) => {
+          const currentSum = current.product.price * current.amount;
+          return prev + currentSum;
+        }, 0);
+        resolvedData.sum = sum;
+      }
+      return resolvedData;
+    },
+    beforeOperation: async ({ resolvedData, item, context }) => {
+      if (resolvedData?.products) {
+        const dbItems = await context.query.Cart.findOne({
+          where: { id: item ? (item.id as string) : '' },
+          query: 'products { id }',
+        });
+        if (dbItems.products.length) {
+          await context.query.CartProduct.deleteMany({
+            where: dbItems.products.map((el: { id: string }) => ({
+              id: el.id,
+            })),
+          });
+        }
+      }
+    },
   },
 });

@@ -12,7 +12,15 @@ import { Roles } from '../enums/roles.enum';
 export const Product = list({
   fields: {
     name: text({ validation: { isRequired: true } }),
-    description: document(),
+    description: document({
+      formatting: true,
+      dividers: true,
+      links: true,
+      layouts: [
+        [1, 1],
+        [1, 1, 1],
+      ],
+    }),
     seoDesc: text({ ui: { displayMode: 'textarea' } }),
     categories: relationship({ ref: 'Category', many: true }),
     images: relationship({ ref: 'ProductImage', many: true }),

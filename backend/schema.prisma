@@ -45,14 +45,24 @@ model Address {
 }
 
 model Cart {
-  id           String    @id @default(cuid())
-  user         User?     @relation("Cart_user", fields: [userId], references: [id])
-  userId       String?   @map("user")
-  products     Product[] @relation("Cart_products")
-  lastModified DateTime? @default(now()) @updatedAt
-  sum          Decimal   @default("0") @postgresql.Decimal(18, 4)
+  id           String        @id @default(cuid())
+  user         User?         @relation("Cart_user", fields: [userId], references: [id])
+  userId       String?       @map("user")
+  products     CartProduct[] @relation("Cart_products")
+  lastModified DateTime?     @default(now()) @updatedAt
+  sum          Decimal       @default("0") @postgresql.Decimal(18, 4)
 
   @@index([userId])
+}
+
+model CartProduct {
+  id                 String   @id @default(cuid())
+  product            Product? @relation("CartProduct_product", fields: [productId], references: [id])
+  productId          String?  @map("product")
+  amount             Int      @default(0)
+  from_Cart_products Cart[]   @relation("Cart_products")
+
+  @@index([productId])
 }
 
 model Order {
@@ -79,20 +89,20 @@ model Order {
 }
 
 model Product {
-  id                     String         @id @default(cuid())
-  name                   String         @default("")
-  description            Json           @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
-  seoDesc                String         @default("")
-  categories             Category[]     @relation("Product_categories")
-  images                 ProductImage[] @relation("Product_images")
-  price                  Decimal?       @postgresql.Decimal(18, 4)
-  stars                  Int?
-  stock                  Stock?         @relation("Product_stock", fields: [stockId], references: [id])
-  stockId                String?        @map("stock")
-  createdAt              DateTime?      @default(now())
-  lastModification       DateTime?      @default(now()) @updatedAt
-  from_Cart_products     Cart[]         @relation("Cart_products")
-  from_Category_products Category[]     @relation("Category_products")
+  id                       String         @id @default(cuid())
+  name                     String         @default("")
+  description              Json           @default("[{\"type\":\"paragraph\",\"children\":[{\"text\":\"\"}]}]")
+  seoDesc                  String         @default("")
+  categories               Category[]     @relation("Product_categories")
+  images                   ProductImage[] @relation("Product_images")
+  price                    Decimal?       @postgresql.Decimal(18, 4)
+  stars                    Int?
+  stock                    Stock?         @relation("Product_stock", fields: [stockId], references: [id])
+  stockId                  String?        @map("stock")
+  createdAt                DateTime?      @default(now())
+  lastModification         DateTime?      @default(now()) @updatedAt
+  from_CartProduct_product CartProduct[]  @relation("CartProduct_product")
+  from_Category_products   Category[]     @relation("Category_products")
 
   @@index([stockId])
 }
